@@ -1,3 +1,5 @@
+import {hexToRGB, rgbToInt} from './helpers/color'
+
 const basicTable = {
     '#520000': {
         sound: {
@@ -163,5 +165,23 @@ const basicTable = {
         octaveMultiplier: 40,
     },
 }
-const hashTable = basicTable
-export default { hashTable }
+class HashTable {
+    constructor() {
+        this.hashByRgbInt = {}
+    }
+    calculate() {
+        Object.keys(basicTable).map((key)=>{
+            const value = basicTable[key]
+            const rgb = hexToRGB(key)
+            const rgbInt = rgbToInt(rgb)
+            console.log(rgb,rgbInt)
+            this.hashByRgbInt[rgbInt] = value
+            return rgbInt
+        })
+        console.log(this.hashByRgbInt)
+    }
+}
+
+
+
+export default HashTable
