@@ -24,7 +24,7 @@ export const intToRGB = (bin) => {
     return { r, g, b }
 }
 
-// convert a hexidecimal color string to 0..255 R,G,B
+// convert a hexadecimal color string to 0..255 R,G,B
 export const hexToRGB = (hexString) => {
     const hex = parseInt(hexString.substr(1), 16)
     const r = hex >> 16
@@ -32,4 +32,11 @@ export const hexToRGB = (hexString) => {
     const g = hex >> 8 & 0xFF
     const b = hex & 0xFF
     return { r, g, b }
+}
+export const transformFromPaperJsColor =(paperJsColorString) =>{
+    return {
+        r: paperJsColorString.red,
+        g: paperJsColorString.green,
+        b: paperJsColorString.blue,
+    }
 }

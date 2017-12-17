@@ -157,13 +157,13 @@ const basicTable = {
         names: ['F5'],
         octaveMultiplier: 40,
     },
-    '#55004f': {
-        transition:true,
-        from: '#520000',
-        to:'#57009e',
-        names: ['F4','F5'],
-        octaveMultiplier: 40,
-    },
+    // '#55004f': {
+    //     transition:true,
+    //     from: '#520000',
+    //     to:'#57009e',
+    //     names: ['F4','F5'],
+    //     octaveMultiplier: 40,
+    // },
 }
 class HashTable {
     constructor() {
@@ -174,11 +174,9 @@ class HashTable {
             const value = basicTable[key]
             const rgb = hexToRGB(key)
             const rgbInt = rgbToInt(rgb)
-            console.log(rgb,rgbInt)
             this.hashByRgbInt[rgbInt] = value
             return rgbInt
         })
-        console.log(this.hashByRgbInt)
     }
 }
 
