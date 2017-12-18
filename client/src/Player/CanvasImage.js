@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import paper from 'paper'
 import { Raster, Path, Point } from 'paper'
 
-import { rgbToInt, hexToRGB } from './helpers/color'
-import { closest } from './helpers/math'
+import { rgbToInt, hexToRGB } from '../helpers/color'
+import { closest } from '../helpers/math'
 
 import HashTable from './colorOfSoundHash'
+import { setTimeout } from 'timers'
+
+import './Player.css'
 
 const ctx = new AudioContext()
 let oscillator = null
@@ -16,6 +19,9 @@ class CanvasImage extends Component {
         super(props, context)
         this.app = {
             hashByRgbInt: {}
+        }
+        this.state = {
+            points:[]
         }
     }
     componentDidMount() {
@@ -37,14 +43,33 @@ class CanvasImage extends Component {
         const hashTable = new HashTable()
         hashTable.calculate()
         this.app.hashByRgbInt = hashTable.hashByRgbInt
+        let points = []
+        for (let i = 0; i < 3; i++) {
+            const x = Math.floor(Math.random() * 800)
+            const y = Math.floor(Math.random() * 800)
+            points.push({x,y})
+        }
+        this.setState({points})        
     }
     handleMouseMove(event) {
-        // const { canvas } = document.getElementById('canvas')
-
         const mousePoint = new Point(event.nativeEvent.offsetX, event.nativeEvent.offsetY)
+        this.placeTheClick(mousePoint)
+    }
+    startTheSong() {
+        const {points} = this.state
+        let prevTimeout = Math.floor(Math.random() * 800)
+        points.forEach(p => {
+            setInterval(()=>{
+                const point = new Point(p.x, p.y)
+                this.placeTheClick(point)
+                this.stopPlayingSound(null,2)
+            },prevTimeout + 500)
+        })
+    }
+    placeTheClick(point) {
         const path = new Path.Circle({
-            center: mousePoint,
-            radius: 5,
+            center: point,
+            radius: 15,
             strokeColor: 'white'
         })
         const averageColor = this.raster.getAverageColor(path)
@@ -52,7 +77,7 @@ class CanvasImage extends Component {
 
         if (averageColor) {
             this.playSoundFor(averageColor)
-            console.log('HEX %s %cRGBA', averageColor.toCSS(true), 'background-color: ' + averageColor.toCSS())
+            // console.log('HEX %s %cRGBA', averageColor.toCSS(true), 'background-color: ' + averageColor.toCSS())
         }
     }
     playSoundFor(color) {
@@ -64,13 +89,11 @@ class CanvasImage extends Component {
         // console.log(colorAsInt, closestNote, frequency)
 
         const soundObject = this.app.hashByRgbInt[closestNote]
-
         var frequency = soundObject.sound.frequency
-        console.log(frequency)
 
         oscillator = ctx.createOscillator()
         gain = ctx.createGain()
-        gain.gain.value = 0.3
+        gain.gain.value = 0.1
 
         oscillator.connect(gain)
         gain.connect(ctx.destination)
@@ -79,12 +102,13 @@ class CanvasImage extends Component {
         
         oscillator.start()
     }
-    stopPlayingSound() {
+    stopPlayingSound(event, whenToStop) {
         // gain.gain.value = 0.1
         gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime)
         gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1)
+        whenToStop = whenToStop || 1
         setTimeout(function(){
-            oscillator.stop(ctx.currentTime + 1)
+            oscillator.stop(ctx.currentTime + whenToStop)
         }, 100)
         // oscillator.stop(ctx.currentTime + 0.5)
         // oscillator.disconnect()
@@ -93,8 +117,8 @@ class CanvasImage extends Component {
         return (
             <div>
                 <canvas id="canvas" width={800} height={800} onMouseUp={this.stopPlayingSound} onMouseDown={(event) => this.handleMouseMove(event)} />
-
-                <img width={800} height={800} id="image" alt='asdads' src={this.props.image} className={this.props.classes.hidden} />
+                <img width={800} height={800} id="image" alt='asdads' src={this.props.image} className={'hidden'} />
+                <button onClick={() => this.startTheSong()}>Start the song</button>
             </div>
         )
     }

@@ -1,4 +1,4 @@
-import {hexToRGB, rgbToInt} from './helpers/color'
+import {hexToRGB, rgbToInt} from '../helpers/color'
 
 const basicTable = {
     '#520000': {
