@@ -9,9 +9,12 @@ export const rgbToHex = (rgb) => {
     const { r, g, b } = rgb
     // eslint-disable-next-line no-mixed-operators
     const bin = r << 16 | g << 8 | b
-    return ((h) => {
+    const ret = ((h) => {
         return new Array(7 - h.length).join('0') + h
     })(bin.toString(16).toUpperCase())
+
+    console.log(ret)
+    return '#' + ret
 }
 
 // convert a 24 bit binary color to 0..255 R,G,B

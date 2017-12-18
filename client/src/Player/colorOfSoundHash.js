@@ -174,6 +174,7 @@ class HashTable {
             const value = basicTable[key]
             const rgb = hexToRGB(key)
             const rgbInt = rgbToInt(rgb)
+            value['hex'] = key
             this.hashByRgbInt[rgbInt] = value
             return rgbInt
         })
