@@ -8,7 +8,6 @@ import { rgbToInt, hexToRGB, rgbToHex } from '../helpers/color'
 import { closest } from '../helpers/math'
 import HashTable from './colorOfSoundHash'
 
-import './Player.css'
 
 const ctx = new AudioContext()
 let oscillator = null
@@ -24,6 +23,13 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
         minHeight:400
     },
+    hidden: {
+        display: 'none'
+    },
+    canvas:{
+        width: 800,
+        height: 533
+    }
 })
   
 
@@ -205,25 +211,28 @@ class CanvasImage extends Component {
 
         return (
             <div>
-                <div>
-                    <canvas id="canvas" className={'canvas'} onMouseUp={this.stopPlayingSound} onMouseDown={(event) => this.handleMouseMove(event)} />
-                    <img  id="image" alt='asdads' src={this.props.image} className={'hidden'} />
-                </div>
-                <Grid container >
-                    <Grid item xs>
-                        <Paper className={classes.paper}> 
-                            <pre>
-                                {JSON.stringify(currentSound, null, 2)}
-                            </pre>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs>
-                        <Paper style={styles.selectedColor} className={classes.paper}>Selected Average color</Paper>
-                    </Grid>
-                    <Grid item xs>
-                        <Paper style={styles.playedColor} className={classes.paper}>Played Color/Note</Paper>
+                <Grid row >
+                    <canvas resize={true} id="canvas" className={classes.canvas} onMouseUp={this.stopPlayingSound} onMouseDown={(event) => this.handleMouseMove(event)} />
+                    <img  id="image" alt='Place where NAME should go' src={this.props.image} className={classes.hidden} />
+                </Grid>
+                <Grid row >
+                    <Grid container >
+                        <Grid item xs>
+                            <Paper className={classes.paper}> 
+                                <pre>
+                                    {JSON.stringify(currentSound, null, 2)}
+                                </pre>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper style={styles.selectedColor} className={classes.paper}>Selected Average color</Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper style={styles.playedColor} className={classes.paper}>Played Color/Note</Paper>
+                        </Grid>
                     </Grid>
                 </Grid>
+                
                 {/* <button onClick={() => this.startTheSong()}>Start the song</button> */}
                 {/* <input type="text" name="sound-radius" onChange={(event)=>{this.handleSoundRadiusChnage(event)}} value={circleRadius} /> */}
             </div>
@@ -233,5 +242,6 @@ class CanvasImage extends Component {
 
 CanvasImage.propTypes = {
     classes: PropTypes.object.isRequired,
+    image: PropTypes.string.isRequired
 }
 export default withStyles(styles)(CanvasImage)
