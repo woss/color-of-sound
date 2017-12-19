@@ -1,9 +1,10 @@
+// @flow
+
 import React, { Component } from 'react'
 import {
     BrowserRouter as Router,
     Route
 } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import MenuAppBar from './AppBar'
 import Player from './Player/Player'
@@ -22,9 +23,12 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
 })
-  
 
-class App extends Component {
+type Props = {
+    classes: Object
+}
+
+class App extends Component<Props> {
     render() {
         const { classes } = this.props
         return (
@@ -42,10 +46,5 @@ class App extends Component {
         )
     }
 }
-
-App.propTypes = {
-    classes: PropTypes.object.isRequired,
-}
   
 export default withStyles(styles)(App)
-  

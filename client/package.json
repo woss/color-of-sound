@@ -15,11 +15,25 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "flow-coverage": "flow-coverage-report",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "flow-coverage-report": {
+    "includeGlob": [
+      "src/lib/**/*.js",
+      "src/lib/**/*.jsx"
+    ],
+    "type": [
+      "text",
+      "html",
+      "json"
+    ]
+  },
   "devDependencies": {
     "eslint": "^4.13.1",
-    "eslint-plugin-react": "^7.5.1"
+    "eslint-plugin-flowtype": "^2.40.1",
+    "eslint-plugin-react": "^7.5.1",
+    "flow-coverage-report": "^0.4.0"
   }
 }

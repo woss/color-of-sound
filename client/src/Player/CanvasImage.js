@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import paper, { Raster, Path, Point } from 'paper'
@@ -31,12 +33,30 @@ const styles = theme => ({
         height: 533
     }
 })
-  
 
-class CanvasImage extends Component {
+type Props = {
+
+}
+
+type State = {
+    hashByRgbInt: Object,
+    circles: Array<any>,
+    settings: {
+        circleRadius: number
+    },
+    currentSound: {
+        model: Object,
+        selectedColor: string,
+        playedColor: string
+    }
+}
+
+type PaperRaster = Object
+
+class CanvasImage extends Component<Props,State> {
     constructor(props, context) {
         super(props, context)
-
+        
         this.state = {
             hashByRgbInt: {},
             circles: [], // not used for now

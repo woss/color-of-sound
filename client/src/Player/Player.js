@@ -1,13 +1,21 @@
-import React, { Component } from 'react'
+// @flow
 
+import React, { Component } from 'react'
 import image from '../assets/images/image.jpg'
 import CanvasImage from './CanvasImage'
 
-class Player extends Component {
+type Props = {
+    image: string
+}
+
+class Player extends Component<Props>{
+    static defaultProps = {
+        image: image
+    };
     render() {
         return (
             <div>
-                <CanvasImage image={image}></CanvasImage>
+                <CanvasImage image={this.props.image}></CanvasImage>
             </div>
         )
     }
