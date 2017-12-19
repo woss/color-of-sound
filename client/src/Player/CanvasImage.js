@@ -1,18 +1,37 @@
 import React, { Component } from 'react'
-import paper from 'paper'
-import { Raster, Path, Point } from 'paper'
-
-import { rgbToInt, hexToRGB, rgbToHex, intToRGB } from '../helpers/color'
+import PropTypes from 'prop-types'
+import paper, { Raster, Path, Point } from 'paper'
+import Grid from 'material-ui/Grid'
+import Paper from 'material-ui/Paper'
+import { withStyles } from 'material-ui/styles'
+import { rgbToInt, hexToRGB, rgbToHex } from '../helpers/color'
 import { closest } from '../helpers/math'
-
 import HashTable from './colorOfSoundHash'
-import { setTimeout } from 'timers'
 
-import './Player.css'
 
 const ctx = new AudioContext()
 let oscillator = null
 let gain = null
+
+const styles = theme => ({
+    root: {
+        flexGrow: 1,
+        marginTop: 30,
+    },
+    paper: {
+        padding: 16,
+        color: theme.palette.text.secondary,
+        minHeight:400
+    },
+    hidden: {
+        display: 'none'
+    },
+    canvas:{
+        width: 800,
+        height: 533
+    }
+})
+  
 
 class CanvasImage extends Component {
     constructor(props, context) {
@@ -48,7 +67,8 @@ class CanvasImage extends Component {
 
         const hashTable = new HashTable()
         hashTable.calculate()
-        this.state.hashByRgbInt = hashTable.hashByRgbInt       
+        const hashByRgbInt = hashTable.hashByRgbInt
+        this.setState({hashByRgbInt})
     }
     handleMouseMove(event) {
         const mousePoint = new Point(event.nativeEvent.offsetX, event.nativeEvent.offsetY)
@@ -116,7 +136,8 @@ class CanvasImage extends Component {
         }
     }
     startTheSong() {
-        this.state.lastTime = performance.now()
+        let lastTime = performance.now()
+        this.setState({lastTime})
         requestAnimationFrame((time)=>{
             this.animate(time)
         })
@@ -176,7 +197,7 @@ class CanvasImage extends Component {
         this.setState({settings})
     }
     render() {
-        const { circleRadius } = this.state.settings
+        // const { circleRadius } = this.state.settings
         const {currentSound} = this.state
         const styles ={
             selectedColor: {
@@ -186,27 +207,41 @@ class CanvasImage extends Component {
                 backgroundColor: currentSound.playedColor
             },
         }
+        const { classes } = this.props
+
         return (
             <div>
-                <div>
-                    <canvas id="canvas" className={'canvas'} onMouseUp={this.stopPlayingSound} onMouseDown={(event) => this.handleMouseMove(event)} />
-                    <img  id="image" alt='asdads' src={this.props.image} className={'hidden'} />
-                </div>
+                <Grid row >
+                    <canvas resize={true} id="canvas" className={classes.canvas} onMouseUp={this.stopPlayingSound} onMouseDown={(event) => this.handleMouseMove(event)} />
+                    <img  id="image" alt='Place where NAME should go' src={this.props.image} className={classes.hidden} />
+                </Grid>
+                <Grid row >
+                    <Grid container >
+                        <Grid item xs>
+                            <Paper className={classes.paper}> 
+                                <pre>
+                                    {JSON.stringify(currentSound, null, 2)}
+                                </pre>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper style={styles.selectedColor} className={classes.paper}>Selected Average color</Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper style={styles.playedColor} className={classes.paper}>Played Color/Note</Paper>
+                        </Grid>
+                    </Grid>
+                </Grid>
                 
-                <div className={'container'} >
-                    <div className={'code onethird'}>
-                        <pre>
-                            {JSON.stringify(currentSound, null, 2)}
-                        </pre>
-                    </div>
-                    <div className={'onethird'} style={styles.selectedColor}>Selected Average color</div>
-                    <div className={'onethird'} style={styles.playedColor}>Played Color/Note</div>
-                </div>
-                
-                <button onClick={() => this.startTheSong()}>Start the song</button>
-                <input type="text" name="sound-radius" onChange={(event)=>{this.handleSoundRadiusChnage(event)}} value={circleRadius} />
+                {/* <button onClick={() => this.startTheSong()}>Start the song</button> */}
+                {/* <input type="text" name="sound-radius" onChange={(event)=>{this.handleSoundRadiusChnage(event)}} value={circleRadius} /> */}
             </div>
         )
     }
 }
-export default CanvasImage
+
+CanvasImage.propTypes = {
+    classes: PropTypes.object.isRequired,
+    image: PropTypes.string.isRequired
+}
+export default withStyles(styles)(CanvasImage)
