@@ -176,7 +176,7 @@ class CanvasImage extends Component {
         this.setState({settings})
     }
     render() {
-        const { circleRadius } = this.state.settings
+        // const { circleRadius } = this.state.settings
         const {currentSound} = this.state
         const styles ={
             selectedColor: {
@@ -203,8 +203,8 @@ class CanvasImage extends Component {
                     <div className={'onethird'} style={styles.playedColor}>Played Color/Note</div>
                 </div>
                 
-                <button onClick={() => this.startTheSong()}>Start the song</button>
-                <input type="text" name="sound-radius" onChange={(event)=>{this.handleSoundRadiusChnage(event)}} value={circleRadius} />
+                {/* <button onClick={() => this.startTheSong()}>Start the song</button> */}
+                {/* <input type="text" name="sound-radius" onChange={(event)=>{this.handleSoundRadiusChnage(event)}} value={circleRadius} /> */}
             </div>
         )
     }
