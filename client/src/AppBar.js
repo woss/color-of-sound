@@ -57,7 +57,7 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography type="title" color="inherit" className={classes.flex}>
-            <Link to="/">Player</Link>
+            <Link to="/"><MenuItem>Player</MenuItem></Link>
             </Typography>
             {auth && (
               <div>
