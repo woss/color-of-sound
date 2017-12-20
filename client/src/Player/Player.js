@@ -45,13 +45,20 @@ type State = {
     circles: Array<any>,
     settings: {
         circleRadius: number,
-        volume: number
+        volume: number,
+        clickStroke: string
     },
     currentSound: {
         model: Object,
         selectedColor: string,
         playedColor: string
     }
+}
+
+type PaperCircleSettings = {
+    center: Array<number>,
+    strokeColor?: string,
+    radius: number
 }
 
 class Player extends Component<Props, State>{
@@ -71,7 +78,8 @@ class Player extends Component<Props, State>{
             circles: [], // not used for now
             settings: {
                 circleRadius: 15,
-                volume: 0.2
+                volume: 0.2,
+                clickStroke: ''
             },
             currentSound: {
                 model: {},
@@ -99,7 +107,7 @@ class Player extends Component<Props, State>{
             // path: new Path.Circle({
             //     center: [50, 100],
             //     radius: this.state.settings.circleRadius,
-            //     strokeColor: 'white'
+            //     clickStroke: 'white'
             // })
         }
         
@@ -136,6 +144,7 @@ class Player extends Component<Props, State>{
             selectedColor: rgbToHex(rgb),
             playedColor: model.hex
         }
+
         this.setState({ currentSound })
         soundApp.oscillator = soundApp.ctx.createOscillator()
         soundApp.oscillator.type = this.state.oscillatorType
@@ -165,18 +174,31 @@ class Player extends Component<Props, State>{
         this.setState({ settings })
     }
     handlePlayClick(e) {
-        const mousePoint = new Point(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
-        this.placeTheClick(mousePoint)
+        let settings: PaperCircleSettings = {
+            center: [e.nativeEvent.offsetX, e.nativeEvent.offsetY],
+            radius: this.state.settings.circleRadius,
+        }
+        if(this.state.settings.clickStroke){
+            settings.strokeColor = this.state.settings.clickStroke
+        }   
+        const c = new Path.Circle(settings)
+        this.placeTheClick(c)
     }
     handleVolumeUp(volume) {
-        volume += 0.01
+        volume += 0.1
+        if(volume >= 1){
+            volume = 1
+        }
         const { settings } = this.state
         settings.volume = volume
         this.setState({ settings })
     }
 
     handleVolumeDown(volume) {
-        volume -= 0.01
+        volume -= 0.1
+        if(volume <= 0){
+            volume = 0
+        }
         const { settings } = this.state
         settings.volume = volume
         this.setState({ settings })
@@ -184,6 +206,13 @@ class Player extends Component<Props, State>{
     handleChangeOfOscillatorType(event) {
         const oscillatorType = event.target.value
         this.setState({oscillatorType})
+    }
+
+    handleSettingsChange(event){
+        const {name, value} = event.target
+        const { settings } = this.state
+        settings[name] = value
+        this.setState({settings})
     }
     render() {
         const { currentSound, settings } = this.state
@@ -211,7 +240,12 @@ class Player extends Component<Props, State>{
                             handleVolumeDown={this.handleVolumeDown.bind(this, settings.volume)}
                             handleChangeOfOscillatorType={(e)=>{this.handleChangeOfOscillatorType(e)}}
                             currentOscillatorType={this.state.oscillatorType}
-                            volume={settings.volume}>
+                            circleRadius={this.state.settings.circleRadius}
+                            onCircleRadiusChange={(event)=>{this.handleSettingsChange(event)}}
+                            volume={settings.volume}
+                            clickStroke={settings.clickStroke}
+                            handleClickStroke={(event)=>{this.handleSettingsChange(event)}}
+                        >
                         </Controls>
                     </Grid>
                 </Grid>

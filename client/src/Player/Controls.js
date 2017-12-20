@@ -11,6 +11,8 @@ import { FormControl } from 'material-ui/Form'
 import Select from 'material-ui/Select'
 import { InputLabel } from 'material-ui/Input'
 import { MenuItem } from 'material-ui/Menu'
+import TextField from 'material-ui/TextField'
+
 
 const styles = theme => ({
     root: {
@@ -27,6 +29,11 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         minWidth: 120,
     },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
 })
 
 type Props = {
@@ -35,11 +42,17 @@ type Props = {
     handleVolumeUp: Function,
     handleVolumeDown: Function,
     handleChangeOfOscillatorType: Function,
-    currentOscillatorType: string
+    onCircleRadiusChange: Function,
+    handleClickStroke: Function,
+    currentOscillatorType: string,
+    circleRadius: number,
+    clickStroke: string,
+
 }
 
 const Controls = (props: Props) => {
-    const {classes,handleVolumeDown, handleVolumeUp, volume} = props
+    const {classes, handleVolumeDown, handleVolumeUp, volume} = props
+    console.log(props)
     return (
         <Grid item xs>
             <Paper className={classes.paper}>
@@ -60,12 +73,34 @@ const Controls = (props: Props) => {
                     <Select
                         value={props.currentOscillatorType}
                         onChange={props.handleChangeOfOscillatorType}
+                        className={classes.textField}
                     >
                         <MenuItem value={'sine'}>Sine</MenuItem>
                         <MenuItem value={'triangle'}>Triangle</MenuItem>
                         <MenuItem value={'sawtooth'}>Sawtooth</MenuItem>
                         <MenuItem value={'square'}>Square</MenuItem>
                     </Select>
+                    <TextField
+                        id="clickStroke"
+                        name="clickStroke"
+                        label="Stroke Color"
+                        placeholder="white, black, #ffe33ew"
+                        type="text"
+                        className={classes.textField}
+                        value={props.clickStroke}
+                        onChange={props.handleClickStroke}
+                        margin="normal"
+                    ></TextField>
+                    <TextField
+                        id="circleRadius"
+                        name="circleRadius"
+                        label="Sound threshold"
+                        type="text"
+                        className={classes.textField}
+                        value={props.circleRadius}
+                        onChange={props.onCircleRadiusChange}
+                        margin="normal"
+                    />
                 </FormControl>
             </Paper>
         </Grid>
