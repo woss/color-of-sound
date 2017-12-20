@@ -32,11 +32,11 @@ class App extends Component<Props> {
     render() {
         const { classes } = this.props
         return (
-            <Router>
+            <Router basename="/color-to-sound">
                 <div className={classes.root}>
                     <MenuAppBar/>
                     <div className={classes.containerWrapper}>
-                        <Route exact path="/" component={Player}/>
+                        <Route path="/player" component={Player}/>
                     </div>
                     {/* <Route path="/about" component={About}/>
                 <Route path="/topics" component={Topics}/> */}

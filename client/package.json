@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "homepage": "https://woss.github.io/color-to-sound",
+  "license": "MIT",
   "dependencies": {
     "material-ui": "^1.0.0-beta.24",
     "material-ui-icons": "^1.0.0-beta.17",
@@ -15,7 +16,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "deploy":"yarn build && gh-pages -d build",
+    "deploy":"yarn build&&gh-pages -d build",
     "build": "react-scripts build",
     "flow-coverage": "flow-coverage-report",
     "test": "react-scripts test --env=jsdom",

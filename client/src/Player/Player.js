@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
-import paper, { Raster, Path, Point } from 'paper'
+import paper, { Raster, Path } from 'paper'
 import { withStyles } from 'material-ui/styles'
 
 
