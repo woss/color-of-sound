@@ -9,7 +9,7 @@ import { withStyles } from 'material-ui/styles'
 
 import { rgbToInt, hexToRGB, rgbToHex } from '../helpers/color'
 import { closest } from '../helpers/math'
-import HashTable from './colorOfSoundHash'
+import HashTable from './440-optimised-hashtable'
 
 import image from '../assets/images/image.jpg'
 import CanvasImage from './CanvasImage'
@@ -21,7 +21,7 @@ const styles = theme => ({
         marginTop: 30,
     },
     paper: {
-        padding: 16,
+        padding: theme.spacing.unit,
         color: theme.palette.text.secondary,
         minHeight: 400
     },
@@ -40,6 +40,7 @@ type Props = {
 }
 
 type State = {
+    oscillatorType: string,
     hashByRgbInt: Object,
     circles: Array<any>,
     settings: {
@@ -65,11 +66,12 @@ class Player extends Component<Props, State>{
         this.paperJs = {}
 
         this.state = {
+            oscillatorType: 'sine',
             hashByRgbInt: {},
             circles: [], // not used for now
             settings: {
                 circleRadius: 15,
-                volume: 0.7
+                volume: 0.2
             },
             currentSound: {
                 model: {},
@@ -94,11 +96,11 @@ class Player extends Component<Props, State>{
         }
         this.paperJs = {
             raster: raster,
-            path: new Path.Circle({
-                center: [50, 100],
-                radius: this.state.settings.circleRadius,
-                strokeColor: 'white'
-            })
+            // path: new Path.Circle({
+            //     center: [50, 100],
+            //     radius: this.state.settings.circleRadius,
+            //     strokeColor: 'white'
+            // })
         }
         
         const hashTable = new HashTable()
@@ -178,8 +180,8 @@ class Player extends Component<Props, State>{
     placeTheClick(path) {
         const averageColor = this.paperJs.raster.getAverageColor(path)
 
-        this.paperJs.path.fillColor = averageColor
-        
+        // this.paperJs.path.fillColor = averageColor
+
         if (averageColor) {
             this.playSoundFor(averageColor)
             // console.log('HEX %s %cRGBA', averageColor.toCSS(true), 'background-color: ' + averageColor.toCSS())
@@ -204,9 +206,10 @@ class Player extends Component<Props, State>{
         }
         this.setState({ currentSound })
         soundApp.oscillator = soundApp.ctx.createOscillator()
+        soundApp.oscillator.type = this.state.oscillatorType
         soundApp.gain = soundApp.ctx.createGain()
         soundApp.gain.gain.value = this.state.settings.volume
-        console.log(soundApp.gain.gain.value)
+        
         soundApp.oscillator.connect(soundApp.gain)
         soundApp.gain.connect(soundApp.ctx.destination)
 
@@ -217,15 +220,12 @@ class Player extends Component<Props, State>{
     stopPlayingSound(event, whenToStop) {
         const  soundApp = this.soundApp
 
-        
         soundApp.gain.gain.setValueAtTime(soundApp.gain.gain.value, soundApp.ctx.currentTime)
         soundApp.gain.gain.exponentialRampToValueAtTime(0.0001, soundApp.ctx.currentTime + 1)
         whenToStop = whenToStop || 1
         setTimeout(function () {
             soundApp.oscillator.stop(soundApp.ctx.currentTime + whenToStop)
         }, 100)
-        // oscillator.stop(ctx.currentTime + 0.5)
-        // oscillator.disconnect()
     }
     handleSoundRadiusChnage(e) {
         const { settings } = this.state
@@ -249,7 +249,10 @@ class Player extends Component<Props, State>{
         settings.volume = volume
         this.setState({ settings })
     }
-
+    handleChangeOfOscillatorType(event) {
+        const oscillatorType = event.target.value
+        this.setState({oscillatorType})
+    }
     render() {
         const { currentSound, settings } = this.state
         const styles = {
@@ -274,6 +277,8 @@ class Player extends Component<Props, State>{
                         <Controls
                             handleVolumeUp={this.handleVolumeUp.bind(this, settings.volume)}
                             handleVolumeDown={this.handleVolumeDown.bind(this, settings.volume)}
+                            handleChangeOfOscillatorType={(e)=>{this.handleChangeOfOscillatorType(e)}}
+                            currentOscillatorType={this.state.oscillatorType}
                             volume={settings.volume}>
                         </Controls>
                     </Grid>

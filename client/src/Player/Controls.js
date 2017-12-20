@@ -7,6 +7,10 @@ import { withStyles } from 'material-ui/styles'
 import VolumeUp from 'material-ui-icons/VolumeUp'
 import VolumeDown from 'material-ui-icons/VolumeDown'
 import IconButton from 'material-ui/IconButton'
+import { FormControl } from 'material-ui/Form'
+import Select from 'material-ui/Select'
+import { InputLabel } from 'material-ui/Input'
+import { MenuItem } from 'material-ui/Menu'
 
 const styles = theme => ({
     root: {
@@ -15,7 +19,14 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
-    }
+    },
+    paper: {
+        marginBottom: theme.spacing.unit,
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+    },
 })
 
 type Props = {
@@ -23,11 +34,12 @@ type Props = {
     volume: number,
     handleVolumeUp: Function,
     handleVolumeDown: Function,
+    handleChangeOfOscillatorType: Function,
+    currentOscillatorType: string
 }
 
 const Controls = (props: Props) => {
     const {classes,handleVolumeDown, handleVolumeUp, volume} = props
-    
     return (
         <Grid item xs>
             <Paper className={classes.paper}>
@@ -37,9 +49,24 @@ const Controls = (props: Props) => {
                 <IconButton onClick={handleVolumeUp} onClickCapture={handleVolumeUp} color="primary" aria-label="add" className={classes.button}>
                     <VolumeUp/>
                 </IconButton>
-                <span>
-                    {(volume || 0) * 100}
-                </span>
+                <IconButton>
+                    {Math.floor((volume || 0) * 100 )}
+                </IconButton>
+                
+            </Paper>
+            <Paper>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="age-simple">Waveform</InputLabel>
+                    <Select
+                        value={props.currentOscillatorType}
+                        onChange={props.handleChangeOfOscillatorType}
+                    >
+                        <MenuItem value={'sine'}>Sine</MenuItem>
+                        <MenuItem value={'triangle'}>Triangle</MenuItem>
+                        <MenuItem value={'sawtooth'}>Sawtooth</MenuItem>
+                        <MenuItem value={'square'}>Square</MenuItem>
+                    </Select>
+                </FormControl>
             </Paper>
         </Grid>
     )

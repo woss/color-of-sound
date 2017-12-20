@@ -13,7 +13,6 @@ export const rgbToHex = (rgb) => {
         return new Array(7 - h.length).join('0') + h
     })(bin.toString(16).toUpperCase())
 
-    console.log(ret)
     return '#' + ret
 }
 
