@@ -6,19 +6,11 @@ import { withStyles } from 'material-ui/styles'
 
 
 
-const styles = theme => ({
+const styles = () => ({
     root: {
         flexGrow: 1,
-        marginTop: 30,
     },
-    paper: {
-        padding: 16,
-        color: theme.palette.text.secondary,
-        minHeight:400
-    },
-    hidden: {
-        display: 'none'
-    },
+    hidden: {display:'none'},
     canvas:{
         width: 800,
         height: 533
@@ -29,22 +21,31 @@ type Props = {
     classes: Object,
     image: string,
     stopPlayingSound: Function,
-    handlePlayClick: Function
+    handlePlayClick: Function,
+    width: string,
+    height: string
 }
 
 
 class CanvasImage extends Component<Props> {
-    
+    static defaultProps = {
+        width: 800,
+        height: 533
+    }
+
     render() {
-        const { classes } = this.props
+        const { image, classes, width, height, stopPlayingSound, handlePlayClick } = this.props
 
         return (
-            <div>
+            <div className={classes.root}>
                 <Grid>
-                    <canvas resize={true} id="canvas" className={classes.canvas} 
-                        onMouseUp={(event) => this.props.stopPlayingSound(event)} 
-                        onMouseDown={(event) => this.props.handlePlayClick(event)} />
-                    <img  id="image" alt='Place where NAME should go' src={this.props.image} className={classes.hidden} />
+                    <canvas 
+                        width={width}
+                        height={height} 
+                        id="canvas" className={classes.canvas} 
+                        onMouseUp={(event) => stopPlayingSound(event)} 
+                        onMouseDown={(event) => handlePlayClick(event)} />
+                    <img id="image" alt='Place where NAME should go' src={image} className={classes.hidden} />
                 </Grid>
             </div>
         )
