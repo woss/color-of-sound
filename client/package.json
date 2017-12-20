@@ -1,8 +1,8 @@
 {
-  "name": "color-to-sound",
+  "name": "color-of-sound",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://woss.github.io/color-to-sound",
+  "homepage": "https://woss.github.io/color-of-sound",
   "license": "MIT",
   "dependencies": {
     "material-ui": "^1.0.0-beta.24",
