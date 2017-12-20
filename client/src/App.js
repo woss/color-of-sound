@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import {
     BrowserRouter as Router,
-    Route
+    Route,Redirect
 } from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import MenuAppBar from './AppBar'
@@ -38,6 +38,9 @@ class App extends Component<Props> {
                     <div className={classes.containerWrapper}>
                         <Route path="/player" component={Player}/>
                     </div>
+                    <Route exact path="/" render={() => (
+                        <Redirect to="/player"/> )
+                    }/>
                     {/* <Route path="/about" component={About}/>
                 <Route path="/topics" component={Topics}/> */}
                 </div>
